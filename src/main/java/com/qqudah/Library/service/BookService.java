@@ -5,6 +5,8 @@ import com.qqudah.Library.exceptions.BookNotFoundException;
 import com.qqudah.Library.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -48,5 +50,13 @@ public class BookService {
                     return bookRepository.save(book);
                 })
                 .orElseThrow(() -> new RuntimeException("Book not found with id: " + id));
+    }
+
+    public int getBooksCount(){
+        return bookRepository.findAll().size();
+    }
+
+    public Page<Book> findAllPaged(Pageable pageable){
+        return bookRepository.findAll(pageable);
     }
 }

@@ -5,10 +5,12 @@ import com.qqudah.Library.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -16,9 +18,10 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
+    // This now supports pagination with Pageable:
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.findAll();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookService.findAllPaged(pageable);
     }
 
     @GetMapping("/{id}")
@@ -40,5 +43,10 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void deleteBook(@PathVariable Long id) {
         bookService.deleteById(id);
+    }
+
+    @GetMapping("/count")
+    public int getBooksCount() {
+        return bookService.getBooksCount();
     }
 }
